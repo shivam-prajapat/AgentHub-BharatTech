@@ -5,6 +5,7 @@ import { AgentCard } from "./AgentCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PackageOpen } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export const AgentGrid = ({ agents, isLoading }: { agents: Agent[]; isLoading: boolean }) => {
   if (isLoading) {
@@ -20,7 +21,7 @@ export const AgentGrid = ({ agents, isLoading }: { agents: Agent[]; isLoading: b
   if (agents.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center p-12 mt-12 text-center bg-neutral-50 rounded-xl border border-dashed border-neutral-300">
-        <img src="/assets/images/empty_agents.png" alt="No agents found" className="w-48 h-auto mix-blend-multiply drop-shadow-sm mb-6 opacity-80 relative -left-4" />
+        <Image src="/assets/images/empty_agents.png" alt="No agents found" width={192} height={192} className="w-48 h-auto mix-blend-multiply drop-shadow-sm mb-6 opacity-80 relative -left-4" />
         <h3 className="text-xl font-bold mb-2 text-neutral-900">No agents match your filters</h3>
         <p className="text-neutral-500 max-w-sm">Clear the current filters or try a broader search to explore more agents in the marketplace.</p>
         <Link href="/agents" className="mt-5 inline-flex rounded-full border border-neutral-200 bg-white px-5 py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 shadow-sm">

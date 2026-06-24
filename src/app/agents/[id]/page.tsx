@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useAgent, useAgentReviews } from "@/hooks/useAgent";
 import { SandboxPanel } from "@/components/SandboxPanel";
@@ -66,7 +67,7 @@ export default function AgentDetailPage() {
           <p className="text-xl text-neutral-600 leading-relaxed">{agent.description}</p>
 
           <div className="flex items-center gap-4 mt-6 p-4 bg-neutral-50 rounded-lg border border-neutral-200 shrink-0 self-start">
-            <img src={`https://github.com/${agent.creatorUsername}.png?size=48`} className="w-12 h-12 rounded-full border border-neutral-200" alt="" />
+            <Image src={`https://github.com/${agent.creatorUsername}.png?size=48`} className="w-12 h-12 rounded-full border border-neutral-200" alt={agent.creatorUsername} width={48} height={48} unoptimized />
             <div>
               <div className="text-sm font-semibold text-neutral-500">Creator</div>
               <div className="text-base flex items-center gap-1 font-mono font-bold text-blue-600">@{agent.creatorUsername}</div>

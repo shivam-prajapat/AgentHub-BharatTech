@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { ScanInput } from "@/components/ScanInput";
 import { RepoDNAResult } from "@/components/RepoDNAResult";
 import { GapDetectorCard } from "@/components/GapDetectorCard";
@@ -59,8 +60,8 @@ export default function ScanPage() {
   return (
     <div className="container mx-auto px-6 py-24 min-h-screen">
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <div className="flex justify-center mb-10">
-          <img src="/assets/images/scan_hero.png" alt="Repository Scanner Illustration" className="h-56 w-auto mix-blend-multiply drop-shadow-lg transition-transform hover:scale-105 duration-700" />
+        <div className="flex justify-center mb-10 relative h-56 w-full">
+          <Image src="/assets/images/scan_hero.png" alt="Repository Scanner Illustration" fill className="object-contain mix-blend-multiply drop-shadow-lg transition-transform hover:scale-105 duration-700" priority />
         </div>
         <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 text-neutral-900">Multi-Context Scan</h1>
         <p className="text-lg text-neutral-600">

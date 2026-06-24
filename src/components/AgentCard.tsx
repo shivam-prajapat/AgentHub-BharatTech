@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Agent } from "@/lib/types";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
@@ -36,7 +37,7 @@ export const AgentCard = ({ agent }: { agent: Agent }) => {
             </CardTitle>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <span className="font-mono flex items-center">
-                <img src={`https://github.com/${agent.creatorUsername}.png?size=32`} className="w-4 h-4 rounded-full mr-1.5" alt="" />
+              <Image src={`https://github.com/${agent.creatorUsername}.png?size=32`} className="w-4 h-4 rounded-full mr-1.5" alt={agent.creatorUsername} width={16} height={16} unoptimized />
                 {agent.creatorUsername}
               </span>
             </div>

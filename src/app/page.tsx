@@ -10,6 +10,7 @@ import { ScrollGlassReveal } from "@/components/ScrollGlassReveal";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useQueryState } from "nuqs";
 import { useRouter } from "next/navigation";
 import { useEffect, Suspense } from "react";
@@ -61,9 +62,9 @@ function HomeContent() {
 
             <IntentSearchBar />
 
-            <div className="mt-8 flex justify-center w-full max-w-lg">
+             <div className="mt-8 flex justify-center w-full max-w-lg">
               <div className="w-full text-center bg-white border border-neutral-200 rounded-3xl overflow-hidden shadow-2xl p-4 md:p-6 relative">
-                 <img src="/assets/images/hero.png" alt="Platform Dashboard Interface" className="w-full h-auto rounded-xl shadow-sm border border-neutral-100" />
+                 <Image src="/assets/images/hero.png" alt="Platform Dashboard Interface" width={800} height={450} className="w-full h-auto rounded-xl shadow-sm border border-neutral-100" priority />
               </div>
             </div>
         </div>
