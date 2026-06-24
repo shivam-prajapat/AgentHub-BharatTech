@@ -31,14 +31,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
       return;
     }
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
         document.cookie = "auth-session=true; path=/; max-age=86400;";
         const docRef = doc(db, "users", currentUser.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setGithubProfile(docSnap.data());
+        try {
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            setGithubProfile(docSnap.data());
+          } else {
+            setGithubProfile({
+              uid: currentUser.uid,
+              githubUsername: currentUser.displayName || "Developer",
+              avatarUrl: currentUser.photoURL || "",
+              createdAt: new Date(),
+            });
+          }
+        } catch (error) {
+          console.warn("Firestore access denied or missing. Using session profile.", error);
+          setGithubProfile({
+            uid: currentUser.uid,
+            githubUsername: currentUser.displayName || "Developer",
+            avatarUrl: currentUser.photoURL || "",
+            createdAt: new Date(),
+          });
         }
       } else {
         document.cookie = "auth-session=; path=/; max-age=0;";
@@ -51,10 +69,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signInWithGitHub = async () => {
-    if (!auth) {
-      console.warn("Firebase Auth not configured. Add credentials to .env");
+    if (!auth || process.env.NEXT_PUBLIC_FIREBASE_API_KEY === undefined || process.env.NEXT_PUBLIC_FIREBASE_API_KEY === "mock_key_for_build") {
+      console.error("Firebase Auth not configured. Please add your credentials to .env.local");
+      alert("Firebase credentials missing! Please configure .env.local with your Firebase API keys to enable GitHub login.");
       return;
     }
+
     try {
       const result = await signInWithPopup(auth, githubProvider);
       const user = result.user;
