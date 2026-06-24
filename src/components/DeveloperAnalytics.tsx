@@ -171,7 +171,8 @@ export const DeveloperAnalytics = ({ agents }: { agents: Agent[] }) => {
 
     return rows.sort((a, b) => {
       if (sortKey === "name") return a.name.localeCompare(b.name);
-      return (b as Record<string, number>)[sortKey] - (a as Record<string, number>)[sortKey];
+      const key = sortKey as "calls" | "latency" | "trust" | "rating" | "revenue";
+      return (b[key] as number) - (a[key] as number);
     });
   }, [agents, calls, sortKey]);
 
@@ -196,10 +197,10 @@ export const DeveloperAnalytics = ({ agents }: { agents: Agent[] }) => {
     <section className="mt-16 space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-white">Developer Analytics</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-neutral-900">Developer Analytics</h2>
           <p className="mt-2 text-sm text-muted-foreground">Usage, performance, and revenue signals across your published agents.</p>
         </div>
-        <div className={`rounded-full border px-4 py-2 text-sm ${pulse ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-300" : "border-white/10 bg-white/5 text-blue-100/70"}`}>
+        <div className={`rounded-full border px-4 py-2 text-sm ${pulse ? "border-emerald-400/40 bg-emerald-500/10 text-emerald-600" : "border-neutral-200 bg-neutral-50 text-neutral-600"}`}>
           Calls today: {callsToday}
         </div>
       </div>
@@ -239,7 +240,7 @@ export const DeveloperAnalytics = ({ agents }: { agents: Agent[] }) => {
               </thead>
               <tbody>
                 {agentBreakdown.map((row) => (
-                  <tr key={row.id} className="border-b border-white/6 text-white/85">
+                  <tr key={row.id} className="border-b border-white/10 text-white/85">
                     <td className="px-4 py-3"><a href={`/agents/${row.id}`} className="hover:text-blue-300">{row.name}</a></td>
                     <td className="px-4 py-3">{row.calls}</td>
                     <td className="px-4 py-3">{row.latency} ms</td>

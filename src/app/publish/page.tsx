@@ -129,7 +129,7 @@ export default function PublishPage() {
         <div className="text-right">
           <div className="font-mono text-xl text-blue-500 font-semibold mb-1">Step {step} of 4</div>
           <div className="flex gap-1">
-            {[1, 2, 3, 4].map(s => <div key={s} className={`h-1.5 w-8 rounded-full ${s <= step ? 'bg-blue-500' : 'bg-white/10'}`} />)}
+            {[1, 2, 3, 4].map(s => <div key={s} className={`h-1.5 w-8 rounded-full transition-colors duration-300 ${s <= step ? 'bg-blue-500' : 'bg-neutral-300'}`} />)}
           </div>
         </div>
       </div>

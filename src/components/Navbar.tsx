@@ -10,12 +10,12 @@ export const Navbar = () => {
   const { user, loading, signOut } = useAuth();
 
   return (
-    <>
+    <header className="sticky top-0 z-50 w-full flex flex-col">
       <div className="w-full bg-[#1c7ced] text-white text-xs md:text-sm py-2.5 px-4 text-center font-medium tracking-wide">
         Find 500 B2B Contacts for Free Every Month with Built-In Outreach. <a href="#" className="font-bold underline underline-offset-2 ml-1">Try AgentHub AI ! ↗</a>
       </div>
-      <div className="w-full px-4 pt-6 pb-2 sticky top-0 z-50">
-        <nav className="mx-auto max-w-5xl flex h-16 items-center justify-between rounded-full border border-neutral-200 bg-white/95 backdrop-blur-md px-6 shadow-sm">
+      <div className="w-full px-4 py-4 bg-white/80 backdrop-blur-md border-b border-neutral-200/50">
+        <nav className="mx-auto max-w-5xl flex h-14 items-center justify-between bg-transparent px-2">
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tight group text-[#111827]">
               Agent<span className="text-[#00b4d8]">Hub</span>
@@ -23,8 +23,8 @@ export const Navbar = () => {
             <div className="hidden md:flex gap-6 text-sm font-medium text-neutral-600">
               <Link href="/agents" className="hover:text-neutral-900 transition-colors">Products</Link>
               <Link href="/scan" className="hover:text-neutral-900 transition-colors">Use Cases</Link>
-              <span className="hover:text-neutral-900 transition-colors cursor-pointer">Resources</span>
-              <span className="hover:text-neutral-900 transition-colors cursor-pointer">Pricing</span>
+              <Link href="/resources" className="hover:text-neutral-900 transition-colors cursor-pointer">Resources</Link>
+              <Link href="/pricing" className="hover:text-neutral-900 transition-colors cursor-pointer">Pricing</Link>
             </div>
           </div>
 
@@ -52,6 +52,6 @@ export const Navbar = () => {
           </div>
         </nav>
       </div>
-    </>
+    </header>
   );
 };

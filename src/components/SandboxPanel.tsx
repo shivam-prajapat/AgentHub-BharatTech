@@ -83,7 +83,7 @@ export const SandboxPanel = ({ agent }: { agent: Agent }) => {
 
       <div className="flex-1 grid grid-cols-2 divide-x divide-neutral-200">
         <div className="flex flex-col relative h-full">
-          <div className="text-[10px] uppercase font-bold tracking-widest text-neutral-500 px-4 py-2 bg-neutral-50 uppercase border-b border-neutral-200">
+          <div className="text-[10px] uppercase font-bold tracking-widest text-neutral-500 px-4 py-2 bg-neutral-50 border-b border-neutral-200">
             Input / JSON payload
           </div>
           <div className="flex-1 overflow-hidden relative group bg-white">

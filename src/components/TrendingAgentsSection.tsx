@@ -54,7 +54,7 @@ export const TrendingAgentsSection = () => {
             </p>
           </div>
 
-          <div className="marquee-shell w-full max-w-xl overflow-hidden mask-edges-light">
+          <div className="marquee-shell w-full max-w-xl overflow-hidden">
             <div className="marquee-track marquee-track-slow flex gap-3">
               {pickedRail.map((agent: any, index) => (
                 <div
@@ -83,7 +83,7 @@ export const TrendingAgentsSection = () => {
           </div>
         </div>
 
-        <div className="marquee-shell overflow-hidden mask-edges-light">
+        <div className="marquee-shell overflow-hidden">
           <div className="marquee-track flex gap-5">
             {trendingRail.map((agent: any, index) => (
               <Card

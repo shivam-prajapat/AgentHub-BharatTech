@@ -147,7 +147,7 @@ export default function DashboardPage() {
         <div>
           <h2 className="text-2xl font-bold mb-6">Your Published Agents</h2>
           {myAgents.length === 0 && !isLoading ? (
-            <div className="rounded-2xl border border-dashed border-white/15 bg-white/4 p-10 text-center">
+            <div className="rounded-2xl border border-dashed border-neutral-200 bg-neutral-50 p-10 text-center">
               <h3 className="text-xl font-semibold">You haven&apos;t published any agents yet</h3>
               <p className="mt-2 text-sm text-muted-foreground">Publish your first agent to start generating usage, trust signals, and revenue.</p>
               <Link href="/publish" className="mt-6 inline-flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white hover:bg-blue-700">
