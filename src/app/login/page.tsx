@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Activity, ArrowRight, Github, ShieldCheck, Sparkles, Workflow } from "lucide-react";
@@ -25,7 +25,7 @@ const highlights = [
   },
 ];
 
-export default function LoginPage() {
+function LoginContent() {
   const { user, loading, signInWithGitHub } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -116,5 +116,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" /></div>}>
+      <LoginContent />
+    </Suspense>
   );
 }

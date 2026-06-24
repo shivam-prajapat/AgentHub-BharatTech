@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  serverExternalPackages: ["@xenova/transformers"],
+  // Turbopack config (Next.js 16 default) — no webpack config needed
+  turbopack: {},
 };
 
 export default nextConfig;

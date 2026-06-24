@@ -117,7 +117,7 @@ export async function POST(req: Request) {
 
     try {
       const nearest = await queryNearestAgents(query, 10);
-      const candidateIds = nearest.map((n: { id: string }) => n.id);
+      const candidateIds = nearest.map((n) => String(n.id));
       const candidateDocs = await Promise.all(candidateIds.map((id: string) => getAgentById(id)));
       validCandidates = candidateDocs.filter(Boolean) as Agent[];
     } catch (e) {
