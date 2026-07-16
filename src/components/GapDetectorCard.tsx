@@ -3,6 +3,7 @@
 import { AgentCard } from "./AgentCard";
 import { ArrowRight, Zap } from "lucide-react";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
 
 export function GapDetectorCard({ gapInfo, onAdd }: { gapInfo: any, onAdd?: () => void }) {
   const { category, agent, impact } = gapInfo;
@@ -28,7 +29,7 @@ export function GapDetectorCard({ gapInfo, onAdd }: { gapInfo: any, onAdd?: () =
           <AgentCard agent={agent} />
         </div>
 
-        <Button onClick={onAdd} className="mt-4 w-full bg-white hover:bg-neutral-50 text-blue-600 font-bold border border-neutral-200 group shadow-sm">
+        <Button onClick={onAdd ?? (() => toast.info('Stack integration coming soon!'))} className="mt-4 w-full bg-white hover:bg-neutral-50 text-blue-600 font-bold border border-neutral-200 group shadow-sm">
           Add to your stack <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
         </Button>
       </div>

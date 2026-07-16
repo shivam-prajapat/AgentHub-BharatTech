@@ -8,7 +8,7 @@ import { TrendingAgentsSection } from "@/components/TrendingAgentsSection";
 import { LiveFeed } from "@/components/LiveFeed";
 import { ScrollGlassReveal } from "@/components/ScrollGlassReveal";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useQueryState } from "nuqs";

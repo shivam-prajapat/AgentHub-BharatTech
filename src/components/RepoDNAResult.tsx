@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { CheckCircle2, GitPullRequest, LayoutTemplate, Star, Users, ArrowRight, Copy, Link2, BadgeCheck } from "lucide-react";
 import { AgentCard } from "./AgentCard";
 import { Button } from "@/components/ui/button";
@@ -21,12 +22,14 @@ interface RepoDNAResultData {
     contributors?: number;
     openIssues?: number;
     primaryLanguage?: string;
+    full_name?: string;
   };
   painPoints?: RepoPainPoint[];
   matchedAgents: Agent[];
 }
 
 export function RepoDNAResult({ result }: { result: RepoDNAResultData | null }) {
+  const router = useRouter();
   const [loadingStep, setLoadingStep] = useState(0);
   const [copiedField, setCopiedField] = useState<"url" | "badge" | null>(null);
 
@@ -174,7 +177,16 @@ export function RepoDNAResult({ result }: { result: RepoDNAResultData | null }) 
             </div>
           </div>
         ) : (
-          <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-500/20 transition-all flex items-center gap-2">
+          <button
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-500/20 transition-all flex items-center gap-2"
+            onClick={() => {
+              if (result?.repoMeta?.full_name) {
+                router.push(`/stack/${result.repoMeta.full_name}`);
+              } else {
+                toast.info('Scan a GitHub repository first to generate a stack page.');
+              }
+            }}
+          >
             Generate Shareable Stack Page <ArrowRight className="w-4 h-4" />
           </button>
         )}

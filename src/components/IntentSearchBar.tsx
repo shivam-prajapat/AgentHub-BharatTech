@@ -15,7 +15,15 @@ export function IntentSearchBar() {
 
   useEffect(() => {
     const r = localStorage.getItem("recent_searches");
-    if (r) setRecent(JSON.parse(r));
+    if (r) {
+      try {
+        const parsed = JSON.parse(r);
+        if (Array.isArray(parsed)) setRecent(parsed);
+      } catch {
+        // Corrupted localStorage data, reset
+        localStorage.removeItem("recent_searches");
+      }
+    }
   }, []);
 
   useEffect(() => {

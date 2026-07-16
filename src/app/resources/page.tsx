@@ -7,25 +7,25 @@ export default function ResourcesPage() {
       icon: <BookOpen className="w-8 h-8 text-blue-500" />,
       title: "Documentation",
       desc: "Learn how to integrate AgentHub into your stack with our comprehensive guides.",
-      link: "#"
+      link: "https://github.com/shivam-prajapat/AgentHub-BharatTech#readme"
     },
     {
       icon: <FileCode className="w-8 h-8 text-purple-500" />,
       title: "API Reference",
       desc: "Detailed API endpoints for programmatic access to agents and sandboxes.",
-      link: "#"
+      link: "https://github.com/shivam-prajapat/AgentHub-BharatTech/blob/main/.env.example"
     },
     {
       icon: <PlayCircle className="w-8 h-8 text-rose-500" />,
       title: "Video Tutorials",
       desc: "Step-by-step video guides on creating, publishing, and calling AI agents.",
-      link: "#"
+      link: "https://youtube.com"
     },
     {
       icon: <Users className="w-8 h-8 text-emerald-500" />,
       title: "Community Forum",
       desc: "Join thousands of developers sharing tips, patterns, and agent architectures.",
-      link: "#"
+      link: "https://github.com/shivam-prajapat/AgentHub-BharatTech/discussions"
     }
   ];
 

@@ -111,19 +111,17 @@ function AgentsContent() {
       .sort((a, b) => b.searchScore - a.searchScore)
       .map(({ agent }) => agent);
 
-    if (sort === "newest") {
-      return result.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    if (!q) {
+      // No search query: sort purely by filter
+      if (sort === "newest") result.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+      if (sort === "used") result.sort((a, b) => (b.totalCalls || 0) - (a.totalCalls || 0));
+      if (sort === "rated") result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      if (sort === "cost") result.sort((a, b) => (a.costPerCall || 0) - (b.costPerCall || 0));
+    } else {
+      // Has search query: sort by relevance (searchScore already applied)
+      // Apply sort as secondary sort only if explicitly "newest"
+      if (sort === "newest") result.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
     }
-    if (sort === "used") {
-      return result.sort((a, b) => (b.totalCalls || 0) - (a.totalCalls || 0));
-    }
-    if (sort === "rated") {
-      return result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-    }
-    if (sort === "cost") {
-      return result.sort((a, b) => (a.costPerCall || 0) - (b.costPerCall || 0));
-    }
-
     return result;
   }, [agents, q, tags, langs, maxCost, minTrust, sort]);
 

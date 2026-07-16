@@ -105,7 +105,7 @@ export const TrendingAgentsSection = () => {
                           variant="outline"
                           className="border-orange-200 bg-orange-50 text-[10px] uppercase font-bold tracking-[0.22em] text-orange-600"
                         >
-                          #{index + 1} trending
+                          #{(index % (trendingRail.length / 2)) + 1} trending
                         </Badge>
                         <Badge variant="outline" className="border-blue-200 bg-blue-50 font-medium text-blue-600">
                           {agent.language}
@@ -116,7 +116,7 @@ export const TrendingAgentsSection = () => {
                     </div>
                     <Image
                       src={agent.ownerAvatarUrl}
-                      alt={agent.owner}
+                      alt={agent.owner || 'Agent owner'}
                       width={40}
                       height={40}
                       className="h-10 w-10 rounded-full border border-neutral-200 object-cover"

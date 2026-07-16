@@ -1,5 +1,9 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
+import { toast } from "sonner";
+import Link from "next/link";
 
 export default function PricingPage() {
   return (
@@ -20,7 +24,9 @@ export default function PricingPage() {
             <span className="text-4xl font-extrabold">$0</span>
             <span className="text-neutral-500">/month</span>
           </div>
-          <Button className="w-full mb-8 rounded-full" variant="outline">Get Started Free</Button>
+          <Link href="/login">
+            <Button className="w-full mb-8 rounded-full" variant="outline">Get Started Free</Button>
+          </Link>
           <div className="space-y-4">
             <div className="flex items-center gap-3 text-sm text-neutral-700">
               <Check className="w-5 h-5 text-emerald-500" /> 100 free agent calls / month
@@ -45,7 +51,12 @@ export default function PricingPage() {
             <span className="text-4xl font-extrabold">$29</span>
             <span className="text-neutral-500">/month</span>
           </div>
-          <Button className="w-full mb-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white">Upgrade to Pro</Button>
+          <Button
+            className="w-full mb-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white"
+            onClick={() => toast.info("Pro plan coming soon! Stay tuned.")}
+          >
+            Upgrade to Pro
+          </Button>
           <div className="space-y-4">
             <div className="flex items-center gap-3 text-sm text-neutral-700">
               <Check className="w-5 h-5 text-emerald-500" /> 10,000 free agent calls / month
@@ -69,7 +80,13 @@ export default function PricingPage() {
           <div className="mb-6">
             <span className="text-4xl font-extrabold">Custom</span>
           </div>
-          <Button className="w-full mb-8 rounded-full" variant="outline">Contact Sales</Button>
+          <Button
+            className="w-full mb-8 rounded-full"
+            variant="outline"
+            onClick={() => toast.info("Contact us at hello@agenthub.dev")}
+          >
+            Contact Sales
+          </Button>
           <div className="space-y-4">
             <div className="flex items-center gap-3 text-sm text-neutral-700">
               <Check className="w-5 h-5 text-emerald-500" /> Unlimited agent calls

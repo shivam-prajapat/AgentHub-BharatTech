@@ -6,7 +6,6 @@ import { Navbar } from "@/components/Navbar";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Link from "next/link";
-import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -24,32 +23,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-background text-foreground min-h-screen flex flex-col font-sans`}>
-        <Script
-          id="anti-devtools"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-             __html: `
-              document.addEventListener('contextmenu', event => event.preventDefault());
-              document.onkeydown = function(e) {
-                if(e.keyCode == 123) {
-                  return false;
-                }
-                if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-                  return false;
-                }
-                if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
-                  return false;
-                }
-                if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-                  return false;
-                }
-                if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-                  return false;
-                }
-              }
-            `,
-          }}
-        />
         <Providers>
           <TooltipProvider>
             <Navbar />
@@ -62,7 +35,7 @@ export default function RootLayout({
                 <div className="flex flex-wrap gap-4">
                   <Link href="/agents" className="hover:text-white">Browse Agents</Link>
                   <Link href="/publish" className="hover:text-white">Publish Agent</Link>
-                  <a href="https://github.com/parasb184-web/hackind" target="_blank" rel="noreferrer" className="hover:text-white">GitHub</a>
+                  <a href="https://github.com/shivam-prajapat/AgentHub-BharatTech" target="_blank" rel="noreferrer" className="hover:text-white">GitHub</a>
                 </div>
               </div>
             </footer>

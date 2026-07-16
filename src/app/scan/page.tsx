@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ScanInput } from "@/components/ScanInput";
 import { RepoDNAResult } from "@/components/RepoDNAResult";
 import { GapDetectorCard } from "@/components/GapDetectorCard";
+import { Button } from "@/components/ui/button";
 
 export default function ScanPage() {
   const [scanResult, setScanResult] = useState<any>(null);
@@ -82,6 +83,18 @@ export default function ScanPage() {
 
       {(isScanning || scanResult) && (
         <RepoDNAResult result={scanResult} />
+      )}
+
+      {scanResult && (
+        <div className="flex justify-center mt-6">
+          <Button
+            variant="outline"
+            onClick={() => { setScanResult(null); setIsScanning(false); }}
+            className="mt-4"
+          >
+            ← Scan Another Repository
+          </Button>
+        </div>
       )}
 
       {scanResult && gapAgents.length > 0 && (

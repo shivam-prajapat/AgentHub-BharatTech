@@ -11,8 +11,19 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const uid = req.headers.get("x-user-id");
+  if (!uid) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const data = await req.json();
+
+    if (!data.name || !data.description || !data.endpointUrl) {
+      return NextResponse.json(
+        { error: "name, description, and endpointUrl are required" },
+        { status: 400 }
+      );
+    }
+
     const newId = await createAgent(data);
     return NextResponse.json({ id: newId }, { status: 201 });
   } catch (error: any) {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo } from 'react';
+import { toast } from 'sonner';
 import ReactFlow, { Background, Controls, MiniMap, addEdge, BackgroundVariant, Connection, Edge } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { useChainStore } from '@/lib/chainStore';
@@ -92,7 +93,7 @@ export function ChainStudio() {
           <div className="w-px h-8 bg-white/10"></div>
           <Button onClick={async () => {
             const id = await saveChain();
-            alert("Chain Saved! ID: " + id);
+            toast.success("Chain saved successfully!", { description: `ID: ${id}` });
           }} className="bg-blue-600 hover:bg-blue-700 font-bold px-6">
             <Save className="w-4 h-4 mr-2" /> Save & Deploy Endpoint
           </Button>

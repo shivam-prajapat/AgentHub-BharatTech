@@ -30,12 +30,13 @@ function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/dashboard";
+  const safeRedirect = redirectTo?.startsWith("/") ? redirectTo : "/dashboard";
 
   useEffect(() => {
     if (!loading && user) {
-      router.replace(redirectTo);
+      router.replace(safeRedirect);
     }
-  }, [loading, redirectTo, router, user]);
+  }, [loading, safeRedirect, router, user]);
 
   const handleSignIn = async () => {
     await signInWithGitHub();

@@ -46,6 +46,10 @@ export const checkHasRunSandbox = async (agentId: string, userId: string): Promi
 };
 
 export const addReview = async (agentId: string, userId: string, rating: number, body: string): Promise<void> => {
+  if (rating < 1 || rating > 5) {
+    throw new Error("Rating must be between 1 and 5");
+  }
+
   const agentRef = doc(db, "agents", agentId);
   const reviewRef = doc(collection(db, "agent_reviews"));
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -35,11 +35,28 @@ const agentSchema = z.object({
 type FormValues = z.infer<typeof agentSchema>;
 
 export default function PublishPage() {
-  const { user, githubProfile } = useAuth();
+  const { user, githubProfile, loading } = useAuth();
   const router = useRouter();
 
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace("/login?redirect=/publish");
+    }
+  }, [user, loading, router]);
+
+  if (loading || (!user && !loading)) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-muted-foreground text-sm">Redirecting to login...</p>
+        </div>
+      </div>
+    );
+  }
 
   const methods = useForm<FormValues>({
     resolver: zodResolver(agentSchema as any),

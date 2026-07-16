@@ -98,6 +98,7 @@ export async function POST(req: Request) {
   try {
     const { query } = await req.json();
     if (!query) return NextResponse.json({ error: "Query is required" }, { status: 400 });
+    if (query.length > 500) return NextResponse.json({ error: "Query too long. Maximum 500 characters." }, { status: 400 });
 
     const hash = crypto.createHash("md5").update(query).digest("hex");
     const cacheRef = doc(db, "search_cache", hash);

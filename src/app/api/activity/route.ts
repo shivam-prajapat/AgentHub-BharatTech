@@ -65,11 +65,29 @@ export async function GET(request: Request) {
   }
 }
 
+const ALLOWED_EVENT_TYPES = ["agent_call", "new_listing", "review", "integration"] as const;
+
 export async function POST(request: Request) {
+  const uid = request.headers.get("x-user-id");
+  if (!uid) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const body = await request.json();
-    if (!body.agentName || !body.repoType || !body.eventType) {
-      return NextResponse.json({ error: "agentName, repoType and eventType are required" }, { status: 400 });
+
+    if (!body.agentName || typeof body.agentName !== "string") {
+      return NextResponse.json({ error: "agentName is required and must be a string" }, { status: 400 });
+    }
+    if (body.agentName.length > 100) {
+      return NextResponse.json({ error: "agentName must be 100 characters or fewer" }, { status: 400 });
+    }
+    if (!body.repoType) {
+      return NextResponse.json({ error: "repoType is required" }, { status: 400 });
+    }
+    if (!body.eventType || !ALLOWED_EVENT_TYPES.includes(body.eventType)) {
+      return NextResponse.json(
+        { error: `eventType must be one of: ${ALLOWED_EVENT_TYPES.join(", ")}` },
+        { status: 400 }
+      );
     }
 
     const ref = await addDoc(collection(db, "activity_feed"), {

@@ -4,13 +4,14 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut, User } from "firebase/auth";
 import { auth, githubProvider, db } from "./firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
+import { UserProfile } from "./types";
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   signInWithGitHub: () => Promise<void>;
   signOut: () => Promise<void>;
-  githubProfile: any | null;
+  githubProfile: UserProfile | null;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -23,7 +24,7 @@ const AuthContext = createContext<AuthContextType>({
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [githubProfile, setGithubProfile] = useState<any | null>(null);
+  const [githubProfile, setGithubProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,12 +36,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        document.cookie = "auth-session=true; path=/; max-age=86400;";
+        document.cookie = "auth-session=true; path=/; max-age=86400; SameSite=Strict";
         const docRef = doc(db, "users", currentUser.uid);
         try {
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
-            setGithubProfile(docSnap.data());
+            setGithubProfile(docSnap.data() as UserProfile);
           } else {
             setGithubProfile({
               uid: currentUser.uid,
@@ -50,7 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             });
           }
         } catch (error) {
-          console.warn("Firestore access denied or missing. Using session profile.", error);
+          // Firestore unavailable, using session profile
           setGithubProfile({
             uid: currentUser.uid,
             githubUsername: currentUser.displayName || "Developer",
@@ -70,8 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signInWithGitHub = async () => {
     if (!auth || process.env.NEXT_PUBLIC_FIREBASE_API_KEY === undefined || process.env.NEXT_PUBLIC_FIREBASE_API_KEY === "mock_key_for_build") {
-      console.error("Firebase Auth not configured. Please add your credentials to .env.local");
-      alert("Firebase credentials missing! Please configure .env.local with your Firebase API keys to enable GitHub login.");
+      console.error("Firebase Auth not configured. Please add credentials to .env.local");
       return;
     }
 
@@ -94,11 +94,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await setDoc(userRef, profile);
         setGithubProfile(profile);
       } else {
-        setGithubProfile(userSnap.data());
+        setGithubProfile(userSnap.data() as UserProfile);
       }
     } catch (error: any) {
       if (error?.code === "auth/popup-closed-by-user" || error?.code === "auth/cancelled-popup-request") {
-        console.log("Login abandoned by user.");
+        // Login abandoned by user.
       } else {
         console.error("Error signing in with GitHub", error);
       }

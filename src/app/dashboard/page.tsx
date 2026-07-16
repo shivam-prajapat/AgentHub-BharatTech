@@ -25,11 +25,19 @@ export default function DashboardPage() {
     if (user) {
       fetch("/api/keys", { headers: { "x-user-id": user.uid } })
         .then(r => r.json())
-        .then(d => { if (Array.isArray(d)) setApiKeys(d) });
+        .then(d => { if (Array.isArray(d)) setApiKeys(d); })
+        .catch(() => toast.error("Failed to load API keys"));
     }
   }, [user]);
 
-  if (loading) return null;
+  if (loading) return (
+    <div className="container mx-auto px-6 py-12 min-h-screen animate-pulse">
+      <div className="h-20 w-64 bg-neutral-100 rounded-xl mb-12" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        {[1, 2, 3].map(i => <div key={i} className="h-32 bg-neutral-100 rounded-xl" />)}
+      </div>
+    </div>
+  );
 
   if (!user || !githubProfile) {
     return (
@@ -37,6 +45,9 @@ export default function DashboardPage() {
         <CloudFog className="w-16 h-16 text-muted-foreground mb-4" />
         <h2 className="text-2xl font-bold tracking-tight mb-2">Authentication Required</h2>
         <p className="text-muted-foreground mb-6 max-w-sm">You must be logged in to view your developer dashboard and manage your custom agents.</p>
+        <Link href="/login" className="mt-6 inline-flex h-10 items-center rounded-lg bg-blue-600 px-6 text-sm font-medium text-white hover:bg-blue-700">
+          Login with GitHub
+        </Link>
       </div>
     );
   }
@@ -50,20 +61,26 @@ export default function DashboardPage() {
       headers: { "Content-Type": "application/json", "x-user-id": user.uid },
       body: JSON.stringify({ label: newKeyLabel || "Default Key" })
     });
-    if (r.ok) {
-      const data = await r.json();
-      setApiKeys([...apiKeys, { ...data, rawKey: undefined }]);
-      setShowKeyModal(data.rawKey);
-      setNewKeyLabel("");
+    if (!r.ok) {
+      toast.error("Failed to create API key");
+      return;
     }
+    const data = await r.json();
+    setApiKeys([...apiKeys, { ...data, rawKey: undefined }]);
+    setShowKeyModal(data.rawKey);
+    setNewKeyLabel("");
   };
 
   const revokeKey = async (id: string) => {
-    await fetch("/api/keys", {
+    const r = await fetch("/api/keys", {
       method: "PUT",
       headers: { "Content-Type": "application/json", "x-user-id": user.uid },
       body: JSON.stringify({ keyId: id })
     });
+    if (!r.ok) {
+      toast.error("Failed to revoke API key");
+      return;
+    }
     setApiKeys(apiKeys.map(k => k.id === id ? { ...k, isActive: false } : k));
   };
 

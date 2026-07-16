@@ -23,6 +23,11 @@ export async function POST(req: Request) {
 
   try {
     const { label } = await req.json();
+
+    if (label && label.length > 100) {
+      return NextResponse.json({ error: "Label must be 100 characters or fewer" }, { status: 400 });
+    }
+
     const rawKey = "ah_" + crypto.randomBytes(24).toString('hex');
     const keyHash = crypto.createHash("sha256").update(rawKey).digest('hex');
     const keyPrefix = rawKey.substring(0, 8);
@@ -39,7 +44,12 @@ export async function POST(req: Request) {
 
     const docRef = await addDoc(collection(db, "api_keys"), newKey);
 
-    return NextResponse.json({ id: docRef.id, ...newKey, rawKey });
+    return NextResponse.json({ id: docRef.id, ...newKey, rawKey }, {
+      headers: {
+        "Cache-Control": "no-store",
+        "Pragma": "no-cache"
+      }
+    });
     // ONLY returned once!
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
