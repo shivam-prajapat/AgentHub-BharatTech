@@ -29,17 +29,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Check if we have a persisted mock session for preview environments
+    const isVercelPreview = 
+      typeof window !== 'undefined' && 
+      window.location.hostname.includes('vercel.app') && 
+      window.location.hostname !== 'agent-hub-bharat-tech-01.vercel.app';
+      
+    if (isVercelPreview) {
+      const mockSession = sessionStorage.getItem('mock_preview_session');
+      if (mockSession) {
+        const mockProfile = JSON.parse(mockSession);
+        setUser({ uid: mockProfile.uid, displayName: mockProfile.githubUsername, photoURL: mockProfile.avatarUrl } as any);
+        setGithubProfile(mockProfile);
+        setLoading(false);
+        // We don't return here because we still want to let Firebase initialize if it wants, 
+        // but we've already set the user state so the UI thinks we are logged in.
+      }
+    }
+
     if (!auth) {
       setLoading(false);
       return;
     }
 
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      // If we are in preview mode AND we have a mock session, IGNORE Firebase's null user
+      if (isVercelPreview && sessionStorage.getItem('mock_preview_session') && !currentUser) {
+        return;
+      }
+      
       setUser(currentUser);
       if (currentUser) {
         document.cookie = "auth-session=true; path=/; max-age=86400; SameSite=Strict";
         
-        // Optimistically set the profile so the UI doesn't hang if Firestore is slow or disabled
         setGithubProfile({
           uid: currentUser.uid,
           githubUsername: currentUser.displayName || "Developer",
@@ -52,22 +74,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             setGithubProfile(docSnap.data() as UserProfile);
-          } else {
-            setGithubProfile({
-              uid: currentUser.uid,
-              githubUsername: currentUser.displayName || "Developer",
-              avatarUrl: currentUser.photoURL || "",
-              createdAt: new Date(),
-            });
           }
         } catch (error) {
-          // Firestore unavailable, using session profile
-          setGithubProfile({
-            uid: currentUser.uid,
-            githubUsername: currentUser.displayName || "Developer",
-            avatarUrl: currentUser.photoURL || "",
-            createdAt: new Date(),
-          });
+          console.error("Firestore error:", error);
         }
       } else {
         document.cookie = "auth-session=; path=/; max-age=0;";
@@ -80,8 +89,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signInWithGitHub = async () => {
-    // BROWSER-ONLY CHECK: If running on a dynamic Vercel preview domain, bypass Firebase Auth
-    // to avoid 'auth/unauthorized-domain' completely, enabling seamless UI testing.
     const isVercelPreview = 
       typeof window !== 'undefined' && 
       window.location.hostname.includes('vercel.app') && 
@@ -95,15 +102,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         createdAt: new Date(),
       };
       
-      // Simulate network delay for realism
-      await new Promise(resolve => setTimeout(resolve, 800));
+      sessionStorage.setItem('mock_preview_session', JSON.stringify(mockProfile));
+      document.cookie = "auth-session=true; path=/; max-age=86400; SameSite=Strict";
       
       setUser({ uid: mockProfile.uid, displayName: mockProfile.githubUsername, photoURL: mockProfile.avatarUrl } as any);
       setGithubProfile(mockProfile);
       
       toast.success("Preview Mode Authenticated", {
-        description: "Logged in via Developer Preview Mode (Firebase Auth bypassed for dynamic Vercel domains).",
-        duration: 6000,
+        description: "Logged in via Developer Preview Mode.",
+        duration: 4000,
       });
       return;
     }
@@ -153,6 +160,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signOut = async () => {
+    const isVercelPreview = 
+      typeof window !== 'undefined' && 
+      window.location.hostname.includes('vercel.app') && 
+      window.location.hostname !== 'agent-hub-bharat-tech-01.vercel.app';
+
+    if (isVercelPreview && sessionStorage.getItem('mock_preview_session')) {
+      sessionStorage.removeItem('mock_preview_session');
+      document.cookie = "auth-session=; path=/; max-age=0;";
+      setUser(null);
+      setGithubProfile(null);
+      toast.success("Logged out of Preview Mode");
+      return;
+    }
+
     if (!auth) return;
     await firebaseSignOut(auth);
   };
