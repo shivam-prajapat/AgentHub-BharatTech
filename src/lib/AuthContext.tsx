@@ -80,6 +80,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signInWithGitHub = async () => {
+    // BROWSER-ONLY CHECK: If running on a dynamic Vercel preview domain, bypass Firebase Auth
+    // to avoid 'auth/unauthorized-domain' completely, enabling seamless UI testing.
+    const isVercelPreview = 
+      typeof window !== 'undefined' && 
+      window.location.hostname.includes('vercel.app') && 
+      window.location.hostname !== 'agent-hub-bharat-tech-01.vercel.app'; // Exact match for production domain
+
+    if (isVercelPreview) {
+      const mockProfile: UserProfile = {
+        uid: "mock-vercel-user-123",
+        githubUsername: "DeveloperPreview",
+        avatarUrl: "https://avatars.githubusercontent.com/u/9919?v=4",
+        createdAt: new Date(),
+      };
+      
+      // Simulate network delay for realism
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      setUser({ uid: mockProfile.uid, displayName: mockProfile.githubUsername, photoURL: mockProfile.avatarUrl } as any);
+      setGithubProfile(mockProfile);
+      
+      toast.success("Preview Mode Authenticated", {
+        description: "Logged in via Developer Preview Mode (Firebase Auth bypassed for dynamic Vercel domains).",
+        duration: 6000,
+      });
+      return;
+    }
+
     if (!auth) {
       console.error("Firebase Auth not initialized.");
       return;
