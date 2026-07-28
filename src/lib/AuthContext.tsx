@@ -109,9 +109,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error: any) {
       if (error?.code === "auth/popup-closed-by-user" || error?.code === "auth/cancelled-popup-request") {
         // Login abandoned by user.
+      } else if (error?.code === "auth/unauthorized-domain") {
+        console.error("Vercel Preview Domain Error:", error);
+        toast.error("Preview Domain Not Authorized", {
+          description: "This is a Vercel preview URL which is blocked by Firebase security rules to prevent phishing. Please test authentication on the main production domain.",
+          duration: 10000,
+        });
       } else {
         console.error("Error signing in with GitHub", error);
-        toast.error(`GitHub Auth Error: ${error.message || "Unknown error"}`);
+        toast.error("Authentication Error", {
+          description: error.message || "An unexpected error occurred during sign-in.",
+        });
       }
     }
   };
