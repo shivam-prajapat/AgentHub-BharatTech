@@ -4,7 +4,7 @@ import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyDXzvCk1_r9smv-oRa5eiNRyq3rChWP7xo",
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "agenthub-dev-2005.firebaseapp.com",
+  authDomain: typeof window !== "undefined" ? window.location.hostname : (process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "agenthub-dev-2005.firebaseapp.com"),
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "agenthub-dev-2005",
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "agenthub-dev-2005.appspot.com",
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "123456789",
