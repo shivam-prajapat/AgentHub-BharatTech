@@ -38,6 +38,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(currentUser);
       if (currentUser) {
         document.cookie = "auth-session=true; path=/; max-age=86400; SameSite=Strict";
+        
+        // Optimistically set the profile so the UI doesn't hang if Firestore is slow or disabled
+        setGithubProfile({
+          uid: currentUser.uid,
+          githubUsername: currentUser.displayName || "Developer",
+          avatarUrl: currentUser.photoURL || "",
+          createdAt: new Date(),
+        });
+
         const docRef = doc(db, "users", currentUser.uid);
         try {
           const docSnap = await getDoc(docRef);
