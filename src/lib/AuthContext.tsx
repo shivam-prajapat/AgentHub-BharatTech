@@ -5,6 +5,7 @@ import { onAuthStateChanged, signInWithPopup, signOut as firebaseSignOut, User }
 import { auth, githubProvider, db } from "./firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { UserProfile } from "./types";
+import { toast } from "sonner";
 
 interface AuthContextType {
   user: User | null;
@@ -70,8 +71,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signInWithGitHub = async () => {
-    if (!auth || process.env.NEXT_PUBLIC_FIREBASE_API_KEY === undefined || process.env.NEXT_PUBLIC_FIREBASE_API_KEY === "mock_key_for_build") {
-      console.error("Firebase Auth not configured. Please add credentials to .env.local");
+    if (!auth) {
+      console.error("Firebase Auth not initialized.");
       return;
     }
 
@@ -101,6 +102,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Login abandoned by user.
       } else {
         console.error("Error signing in with GitHub", error);
+        toast.error(`GitHub Auth Error: ${error.message || "Unknown error"}`);
       }
     }
   };
