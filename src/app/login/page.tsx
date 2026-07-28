@@ -40,6 +40,8 @@ function LoginContent() {
 
   const handleSignIn = async () => {
     await signInWithGitHub();
+    // Force immediate redirect after sign-in completes
+    router.replace(safeRedirect);
   };
 
   return (
